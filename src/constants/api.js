@@ -1,10 +1,10 @@
 export const API_CONFIG = {
     BASE_URL: 'http://api.openweathermap.org',
     ENDPOINT: {
-        DIRECT_GEOCODING : '/geo/1.0/direct'
+        COORDINATES_BY_LOCATION_NAME : '/geo/1.0/direct',
+        CURRENT_WEATHER_DATA: '/data/2.5/weather'
     },
     DEFAULT_PARAMS : {
-        LIMIT: 1,
         APPID: import.meta.env.VITE_API_WEATHERMAP
     }
 }

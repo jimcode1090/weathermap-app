@@ -1,4 +1,4 @@
-import {ref} from "vue";
+import {computed, ref} from "vue";
 import {SUPPORTED_COUNTRIES} from "../constants/countries.js";
 import {weatherMapService} from "../services/weatherMapService.js";
 import {useAsync} from "../composables/utilities/useAsync.js";
@@ -7,7 +7,7 @@ import {useValidation} from "../composables/utilities/useValidation.js";
 
 export function useWeatherMapViewModel() {
 
-    const currentWeatherMap = ref(null)
+    const currentWeather = ref({})
     const formData = ref({
         city: '',
         country: ''
@@ -24,31 +24,47 @@ export function useWeatherMapViewModel() {
         }
 
         clearErrors()
+        currentWeather.value = {}
 
         try {
-            currentWeatherMap.value = await execute(() =>
+            // Obtenemos la lat, lng
+            const {lat, lon} = await execute(() =>
                 weatherMapService.getCoordsByCity(
                     formData.value.city,
                     formData.value.country
                 )
             )
+            // Obtenemos el clima basándonos en lat y lng
+            const response = await execute(() =>
+                weatherMapService.getCurrentWeatherData(lat, lon)
+            )
 
-            console.log({currentWeatherMap})
-        }catch (e) {
-            setError('general', e.message)
+            currentWeather.value = response
+
+        }catch (err) {
+            console.log({err})
+            console.log(err.message)
+            setError('general', err.message)
         }
 
     }
 
+    const showWeather = computed(() => {
+        return Object.values(currentWeather.value).length > 0
+    })
+
     return {
         //Estado
         countries,
+        currentWeather,
 
         formData,
         loading,
         errors,
 
+        showWeather,
+
         //Acciones
-        fetchWeather
+        fetchWeather,
     }
 }

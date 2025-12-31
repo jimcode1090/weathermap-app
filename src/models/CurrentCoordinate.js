@@ -1,4 +1,4 @@
-export class CoordinateCurrent {
+export class CurrentCoordinate {
 
     constructor(name, lat, lon, country, state) {
         this.name = name
@@ -13,7 +13,7 @@ export class CoordinateCurrent {
             throw new Error('Invalid Coordinate Current data')
         }
 
-        return new CoordinateCurrent(
+        return new CurrentCoordinate(
             apiData.name,
             apiData.lat,
             apiData.lon,

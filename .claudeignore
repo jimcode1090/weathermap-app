@@ -1,0 +1,42 @@
+# .claudeignore en raíz del proyecto
+
+# Excluir vendor completo
+/vendor/
+
+# Excluir node_modules
+/node_modules/
+
+# Excluir archivos compilados
+/public/build/
+/public/hot
+/public/storage
+
+# Excluir storage
+/storage/framework/cache/
+/storage/framework/sessions/
+/storage/framework/views/
+/storage/logs/
+
+# Excluir assets
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.svg
+*.mp4
+*.mp3
+
+# Excluir configs de IDE
+.idea/
+.vscode/
+
+# Excluir archivos temporales
+*.log
+*.cache
+.env
+.env.*
+!.env.example
+
+# Excluir documentación extensa
+/docs/api/
+/wiki/

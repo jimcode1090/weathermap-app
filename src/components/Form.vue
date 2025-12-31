@@ -27,10 +27,6 @@ const handleSubmit = () => {
 <template>
 
   <form @submit.prevent="handleSubmit" class="formulario">
-    <Alert v-if="errors.general">
-      {{ errors.general }}
-    </Alert>
-
     <div class="campo">
       <label for="city">Ciudad: </label>
       <input v-model="formData.city" type="text" name="city" id="city" placeholder="Ingrese la ciudad">

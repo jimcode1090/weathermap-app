@@ -12,6 +12,7 @@ export function useAsync () {
             return await asyncFn()
         }catch (e) {
             error.value = e.message || 'Ocurrió un error desconocido'
+            throw e  // Re-lanzar el error para que el caller lo maneje
         }finally {
             loading.value = false
         }

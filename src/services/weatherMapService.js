@@ -1,32 +1,44 @@
+
 import {API_CONFIG, buildApiUrl} from "../constants/api.js";
-import {CoordinateCurrent} from "../models/CoordinateCurrent.js";
+import {CurrentCoordinate} from "../models/CurrentCoordinate.js";
+import axios from "axios";
+import {CurrentWeather} from "../models/CurrentWeather.js";
 
 
 class WeatherMapService {
-    
+
     
     async getCoordsByCity(city, country) {
         try {
-            const url = buildApiUrl(API_CONFIG.ENDPOINT.DIRECT_GEOCODING, {
+            const url = buildApiUrl(API_CONFIG.ENDPOINT.COORDINATES_BY_LOCATION_NAME, {
                 ...API_CONFIG.DEFAULT_PARAMS,
-                q: `${city},${country}`
+                q: `${city},${country}`,
+                limit: 1
             })
-
-            console.log(url)
-
-            const response = await fetch(url);
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`)
-            }
-
-            const data = await response.json()
+            const { data } = await axios(url);
             if (!data || !Array.isArray(data)) {
                 throw new Error('Invalid API response format')
             }
-            return CoordinateCurrent.fromApi(data[0])
-        }catch (e) {
-            console.error('Error fetching cryptocurrencies:', error)
+            return CurrentCoordinate.fromApi(data[0])
+        }catch (error) {
+            console.error('Error fetching getCoordsByCity:', error)
+            throw new Error('No se pudieron obtener las coordenadas. Por favor intenta más tarde.')
+        }
+    }
+
+    async getCurrentWeatherData(lat, lng) {
+        try {
+            const url  = buildApiUrl(API_CONFIG.ENDPOINT.CURRENT_WEATHER_DATA, {
+                lat,
+                lon: lng,
+                ...API_CONFIG.DEFAULT_PARAMS
+            })
+
+            const {data} = await axios(url)
+            console.log(data)
+            return CurrentWeather.fromApi(data)
+        }catch (error) {
+            console.error('Error fetching getCurrentWeatherData:', error)
             throw new Error('No se pudieron obtener el clima. Por favor intenta más tarde.')
         }
     }
